@@ -1,9 +1,13 @@
-(ns hackerrank.knapsack  (:require
-  [clojure.set    :refer [union]]
-  [clojure.string :refer [split]]))
+(ns hackerrank.knapsack
+  (:require  [clojure.set    :refer [union]]
+             [clojure.string :refer [split]])
+  (:import java.util.PriorityQueue))
 (defn read-ints [] (map #(Long/parseLong %) (split (read-line) #"\s+")))
 (dotimes [t (first (read-ints))]
   (let [[n k]   (read-ints)
-        produce (fn [s x] (do (println s) (union s (filter #(<= % k) (map #(+ x %) s)))))
-        iter    (fn [s x] (let [s' (produce s x)] (if (= s s') s (recur s' x))))]
-    (println  (reduce iter #{0} (read-ints)))))
+        xs      (read-ints)
+        q       (PriorityQueue. [0])]
+    (println (loop [prev nil] (if empty? q) prev
+      (let [next (.poll q)]
+        (when-not (= next prev) (some->> (filter #(< % k) (map #(+ next %) xs)) (.addAll q)))
+        (recur next))))))
