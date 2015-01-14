@@ -2,19 +2,22 @@
 
 (defn get' [s i j] (get (get s i) j))
 (defn produce-line
-  ([s prev-line i] (produce-line 1 prev-line i (dec i) [1]))
+  ([s prev-line i] (produce-line s prev-line 1 i (dec i) [1]))
   ([s prev-line prev i j acc]
-    (if (empty? prev) [acc prev]
+    (if (empty? prev-line) [acc prev]
       (let [that (if (= (get s i) (get s j))
                   (if-some [x (second prev-line)] (+ 2 x) 2)
-                  (max (prev) (first prev-line)))]
-      (recur s (rest prev-line) that i (dec j) (conj acc that))))))
+                  (max prev (first prev-line)))]
+        (println prev-line i)
+        (recur s (rest prev-line) that i (dec j) (conj acc that))))))
+
 (defn produce-table
   ([s] (produce-table s [1] [1] 1))
-  ([s prev-line i acc]
+  ([s prev-line acc i]
     (if (= i (count s)) [prev-line acc]
       (let [[that-line v] (produce-line s prev-line i)]
-        (recur s that-line (inc i) (conj acc v))))))
+        (recur s that-line (conj acc v) (inc i))))))
+(println (produce-table "12321"))
 
 (defn main []
   (let [s (read-line)
