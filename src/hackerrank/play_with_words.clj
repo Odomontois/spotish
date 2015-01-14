@@ -8,7 +8,7 @@
       (let [that (if (= (get s i) (get s j))
                   (if-some [x (second prev-line)] (+ 2 x) 2)
                   (max prev (first prev-line)))]
-        (println prev-line i)
+        (println prev-line i j acc)
         (recur s (rest prev-line) that i (dec j) (conj acc that))))))
 
 (defn produce-table
