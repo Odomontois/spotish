@@ -7,7 +7,7 @@
   (let [[n k]   (read-ints)
         xs      (read-ints)
         q       (PriorityQueue. [0])]
-    (println (loop [prev nil] (if empty? q) prev
+    (println (loop [prev nil] (if (empty? q) prev
       (let [next (.poll q)]
-        (when-not (= next prev) (some->> (filter #(< % k) (map #(+ next %) xs)) (.addAll q)))
-        (recur next))))))
+        (when-not (= next prev) (some->> (filter #(<= % k) (map #(+ next %) xs)) (.addAll q)))
+        (recur next)))))))
