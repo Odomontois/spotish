@@ -11,3 +11,4 @@
       (let [next (.poll q)]
         (when-not (= next prev) (some->> (filter #(<= % k) (map #(+ next %) xs)) (.addAll q)))
         (recur next)))))))
+

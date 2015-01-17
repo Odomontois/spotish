@@ -1,0 +1,15 @@
+(ns ^{:author Odomontois} hackerrank.Red-John-is-back)
+(def ways (lazy-cat [1 1 1 1] (map + ways (drop 3 ways))))
+(declare primes)
+(defn prime? [n] (every? #(not= 0 (mod n %)) (take-while (fn [x] (<= (* x x) n)) primes)))
+(def primes (cons 2 (filter prime? (iterate #(+ 2 %) 3))))
+(defn count-compare
+  ([op x y] (count-compare op x y 0))
+  ([op x y cnt]
+    (if (op (first y) (first x))
+      (recur op x (rest y) (inc cnt))
+      (lazy-seq (cons cnt (count-compare op (rest x) y cnt))))))
+(def primes-upto-ways (count-compare <= ways primes))
+(defn read-int [] (Long/parseLong (read-line)))
+(defn main [] (dotimes [_ (read-int)] (println (nth primes-upto-ways (read-int)))))
+(main)
