@@ -2,9 +2,7 @@
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Clojure" name="Clojure">
-      <configuration>
-        <option name="myReplPort" value="54648" />
-      </configuration>
+      <configuration />
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
@@ -19,5 +17,6 @@
     <orderEntry type="library" name="Maven: org.clojure:clojure:1.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.clojure:tools.nrepl:0.2.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: clojure-complete:clojure-complete:0.2.3" level="project" />
+    <orderEntry type="library" name="Maven: org.clojure:clojure:1.6.0" level="project" />
   </component>
 </module>
