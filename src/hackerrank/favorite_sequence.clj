@@ -4,12 +4,8 @@
 (defn read-int [] (Long/parseLong (read-line)))
 (defn read-ints [] (map #(Long/parseLong %) (split (read-line) #"\s+")))
 (defn read-seqs [] (repeatedly (read-int) #(do (read-line) (read-ints))))
-(defn children [l] (map #(hash-map %1 [%2]) (cons 0 l) l))
+(defn children [l] (map #(hash-map %1 [%2]) l (rest l)))
 (defn children-map [seqs] (apply merge-with concat (mapcat children seqs)))
-(defn walk
-  ([prelim children] (walk prelim children 0 []))
-  ([prelim children x acc]
-    ))
 (defn prelim-map [seqs] (frequencies (apply concat (map rest seqs))))
 (defn dec-prelim [[prelim order] x]
   (let [v (get prelim x)]
