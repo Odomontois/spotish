@@ -1,6 +1,7 @@
 (ns ^{:author Odomontois} hackerrank.favorite-sequence
   (:require [clojure.string :refer [split]]
-            [clojure.set :refer [difference]]))
+            [clojure.set :refer [difference]])
+  (:import (java.io BufferedReader FileReader)))
 (defn read-int [] (Long/parseLong (read-line)))
 (defn read-ints [] (map #(Long/parseLong %) (split (read-line) #"\s+")))
 (defn read-seqs [] (repeatedly (read-int) #(do (read-line) (read-ints))))
@@ -21,10 +22,13 @@
           [prelim' order''] (reduce dec-prelim [prelim order'] free)]
       (recur children prelim' order'' (conj acc next)))))
 (defn guess-sequence [seqs]
-  (let [children  (children-map seqs)
-        prelim    (prelim-map seqs)
-        order     (difference (apply sorted-set (map first seqs)) (apply hash-set (keys prelim)))]
-  (guess-step children prelim order [])))
+  (let [children (children-map seqs)
+        prelim (prelim-map seqs)
+        order (difference (apply sorted-set (map first seqs)) (apply hash-set (keys prelim)))]
+    (guess-step children prelim order []))) 2
 (defn main [] (apply println (guess-sequence (read-seqs))))
-(main)
 
+(if-not (empty? *command-line-args*)
+  (doseq [file *command-line-args*]
+    (binding [*in* (BufferedReader. (FileReader. file))] (main)))
+  (main))
