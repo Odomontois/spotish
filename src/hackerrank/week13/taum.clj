@@ -10,4 +10,4 @@
           x' (min x (+ y z))
           y' (min y (+ x z))]
       (println (+ (* x' b) (* y' w))))))
-(main)ma
+(main)

@@ -8,4 +8,3 @@
 (defn main []
   (dotimes [_ (Long/parseLong (read-line))]
     (println (anagramic (read-line)))))
-(main)
