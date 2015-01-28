@@ -1,25 +1,36 @@
 (ns hackerrank.a-jorney-to-the-moon
   (:require [clojure.string :refer [split]]))
-(defn init-sets [n] (vec (repeat n 1)))
-(defn get-set [sets i]
-  (let [v (sets i)]
-    (if (pos? v)
-      [sets i]
-      (let [[sets' s] (get-set sets (- v))]
-        [(assoc sets' i (- s)) s]))))
+(defprotocol SetCell
+  (get-set [c sets])
+  (root? [c]))
+(defrecord RootCell [^long idx ^long count]
+  SetCell
+  (get-set [this sets] [sets this])
+  (root? [_this] true))
+(defrecord RefCell [^long idx ^long parent]
+  SetCell
+  (get-set [_this sets]
+    (let [p (sets parent)
+          [sets' root] (get-set p sets)]
+      (if (root? p)
+        [sets' root]
+        [(assoc sets' idx (->RefCell idx (:idx root))) root])))
+  (root? [_this] false))
+(defn get-set-idx [sets i] (get-set (sets i) sets))
+(defn init-sets [n] (vec (for [i (range n)] (->RootCell i 1))))
 (defn merge-sets
   ([sets [^long i ^long j]]
-    (let [[sets' si] (get-set sets i)
-          [sets'' sj] (get-set sets' j)
-          sa (+ (sets si) (sets sj))]
-      (cond
-        (= si sj) sets
-        (> (sets si) (sets sj)) (assoc sets'' sj (- si) si sa)
-        :else (assoc sets'' si (- sj) sj sa)))))
+    (let [[sets'  si] (get-set-idx sets i)
+          [sets'' sj] (get-set-idx sets' j)]
+      (if (= si sj)
+        sets
+        (let [[root sec] (if (> (:count si) (:count sj)) [si sj] [sj si])
+              rc         (->RootCell (:idx root) (+ (:count si) (:count sj)))]
+          (assoc sets'' (:idx root) rc (:idx sec) (->RefCell (:idx sec) (:idx rc))))))))
 (defn merge-all [n merges] (reduce merge-sets (init-sets n) merges))
 (defn square [x] (* x x))
 (defn variants [sets]
-  (let [counts (filter pos? sets)
+  (let [counts (->> sets (filter root?) (map :count))
         squares (map square counts)
         csum (reduce + counts)
         ssum (reduce + squares)]
