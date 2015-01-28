@@ -8,6 +8,22 @@
       (let [s (get-set sets (- v))]
         (assoc! sets i (- s))
         s))))
+(defn get-set' [sets i]
+  (let [v (sets i)]
+    (if (pos? v)
+      [sets i]
+      (let [[sets' s] (get-set' sets (- v))]
+        [(assoc sets' i (- s)) s]))))
+(defn merge-sets'
+  ([sets [^long i ^long j]]
+    (let [[sets' si] (get-set' sets i)
+          [sets'' sj] (get-set' sets' j)
+          sa (+ (sets si) (sets sj))]
+      (cond
+        (= si sj)               sets
+        (> (sets si) (sets sj)) (assoc sets'' sj (- si) si sa)
+        :else                   (assoc sets'' si (- sj) sj sa)))))
+(defn merge-all' [n merges] (reduce merge-sets' (init-sets n) merges))
 (defn merge-sets
   ([sets ^long i ^long j]
     (let [si (get-set sets i)
