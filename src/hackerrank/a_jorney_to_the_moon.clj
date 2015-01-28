@@ -20,18 +20,19 @@
           [sets'' sj] (get-set' sets' j)
           sa (+ (sets si) (sets sj))]
       (cond
-        (= si sj)               sets
+        (= si sj) sets
         (> (sets si) (sets sj)) (assoc sets'' sj (- si) si sa)
-        :else                   (assoc sets'' si (- sj) sj sa)))))
+        :else (assoc sets'' si (- sj) sj sa)))))
 (defn merge-all' [n merges] (reduce merge-sets' (init-sets n) merges))
 (defn merge-sets
   ([sets ^long i ^long j]
     (let [si (get-set sets i)
           sj (get-set sets j)
           sa (+ (sets si) (sets sj))]
-      (if (> (sets si) (sets sj))
-        (assoc! sets sj (- si) si sa)
-        (assoc! sets si (- sj) sj sa)))))
+      (when (not= si sj)
+        (if (> (sets si) (sets sj))
+          (assoc! sets sj (- si) si sa)
+          (assoc! sets si (- sj) sj sa))))))
 (defn square [x] (* x x))
 (defn variants [sets]
   (let [counts (filter pos? sets)
