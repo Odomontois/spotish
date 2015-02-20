@@ -17,6 +17,7 @@
     <orderEntry type="library" name="Leiningen: clojure-csv:2.0.1" level="project" />
     <orderEntry type="library" name="Leiningen: environ:1.0.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/clojure:1.6.0" level="project" />
+    <orderEntry type="library" name="Leiningen: org.clojure/data.json:0.2.5" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/tools.nrepl:0.2.3" level="project" />
   </component>
 </module>
